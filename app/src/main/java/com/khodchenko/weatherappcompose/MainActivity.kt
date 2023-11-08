@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.khodchenko.weatherappcompose.screens.MainScreen
 import com.khodchenko.weatherappcompose.ui.theme.WeatherAppComposeTheme
 import org.json.JSONObject
 
@@ -35,13 +36,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WeatherAppComposeTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("London", this)
-                }
+                MainScreen()
             }
         }
     }
