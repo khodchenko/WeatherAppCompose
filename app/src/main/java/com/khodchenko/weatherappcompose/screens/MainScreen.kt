@@ -11,13 +11,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -64,17 +65,62 @@ fun MainScreen() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "20 Jun 2022 13:00",
+                    Text(
+                        text = "20 Jun 2022 13:00",
                         modifier = Modifier.padding(top = 10.dp, start = 10.dp),
-                        style = TextStyle(fontSize = 15.sp),
-                        color = Color.White
+                        style = TextStyle(fontSize = 15.sp)
                     )
                     AsyncImage(
                         model = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
                         contentDescription = "Weather icon",
-                        modifier = Modifier.size(35.dp).padding(top = 4.dp, end = 8.dp),
+                        modifier = Modifier
+                            .size(35.dp)
+                            .padding(top = 4.dp, end = 8.dp),
                     )
 
+                }
+
+                Text(
+                    text = "Madrid",
+                    style = TextStyle(fontSize = 24.sp)
+                )
+
+                Text(
+                    text = "23°C",
+                    style = TextStyle(fontSize = 64.sp)
+                )
+
+                Text(
+                    text = "Partly cloudy",
+                    style = TextStyle(fontSize = 16.sp)
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_search),
+                            contentDescription = "image"
+                        )
+                    }
+
+                    Text(
+                        text = "23°C/12°C",
+                        style = TextStyle(fontSize = 16.sp)
+                    )
+
+                    IconButton(onClick = {
+
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_sync),
+                            contentDescription = "image"
+                        )
+                    }
                 }
             }
 
