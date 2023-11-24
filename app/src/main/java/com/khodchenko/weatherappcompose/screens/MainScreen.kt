@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,6 +38,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.khodchenko.weatherappcompose.R
+import com.khodchenko.weatherappcompose.data.WeatherModel
 import kotlinx.coroutines.launch
 
 
@@ -175,9 +177,33 @@ fun TabLayout() {
             modifier = Modifier.weight(1.0f)
         ) { index ->
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(15) {
-                    ListItem()
+                itemsIndexed(
+                    listOf(
+                        WeatherModel(
+                            "London",
+                            "10:00",
+                            "25°C",
+                            "Sunny",
+                            "//cdn.weatherapi.com/weather/64x64/night/116.png",
+                            "",
+                            "",
+                            ""
+                        ), WeatherModel(
+                            "London",
+                            "26/07/2022",
+                            "",
+                            "Sunny",
+                            "//cdn.weatherapi.com/weather/64x64/night/116.png",
+                            "26°C",
+                            "12°C",
+                            "gfgdfgdfgdfggd"
+                        )
+                    )
+                ) { _, item ->
+                    ListItem(item)
                 }
+
+
             }
 
         }
