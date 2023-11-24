@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -146,16 +148,25 @@ fun TabLayout() {
     ) {
         TabRow(
             selectedTabIndex = tabIndex, indicator = { pos ->
-                TabRowDefaults.Indicator(Modifier.pagerTabIndicatorOffset(pagerState = pagerState, tabPositions = pos))
+                TabRowDefaults.Indicator(
+                    Modifier.pagerTabIndicatorOffset(
+                        pagerState = pagerState,
+                        tabPositions = pos
+                    )
+                )
             },
             modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceVariant)
         ) {
             tabList.forEachIndexed { index, text ->
-                Tab(selected = false, onClick = {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(index)
-                    }
-                }, text = { Text(text = text) })
+                Tab(
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.surfaceVariant), //todo change color
+                    selected = false,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = { Text(text = text) })
             }
         }
         HorizontalPager(
@@ -163,7 +174,11 @@ fun TabLayout() {
             state = pagerState,
             modifier = Modifier.weight(1.0f)
         ) { index ->
-
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(15) {
+                    ListItem()
+                }
+            }
 
         }
     }
