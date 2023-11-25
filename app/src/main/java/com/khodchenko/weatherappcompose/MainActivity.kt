@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.khodchenko.weatherappcompose.data.WeatherModel
 import com.khodchenko.weatherappcompose.screens.MainCard
 import com.khodchenko.weatherappcompose.screens.TabLayout
 import com.khodchenko.weatherappcompose.ui.theme.WeatherAppComposeTheme
@@ -38,7 +39,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WeatherAppComposeTheme {
-                getData("London", this)
+                val daysList = remember {
+                    mutableStateOf(listOf<WeatherModel>())
+                }
+                getData("London", this, daysList)
                 Image(
                     painter = painterResource(id = R.drawable.weather_bg),
                     contentDescription = "Background",
@@ -47,7 +51,7 @@ class MainActivity : ComponentActivity() {
                 )
                 Column {
                     MainCard()
-                    TabLayout()
+                    TabLayout(daysList)
                 }
 
             }
@@ -100,7 +104,7 @@ private fun getResult(city: String, state: MutableState<String>, context: Contex
     queue.add(stringRequest)
 }
 
-private fun getData(city: String, context: Context) {
+private fun getData(city: String, context: Context, daysList : MutableState<List<WeatherModel>>) {
     val url = "https://api.weatherapi.com/v1/forecast.json?key=$API_KEY" +
             "&q=$city" +
             "&days=" +
@@ -113,10 +117,42 @@ private fun getData(city: String, context: Context) {
         url,
         { response ->
             Log.d("MyLog", "Response :$response")
+            val list = getWeatherByDays(response)
+            daysList.value = list
         }, {
             Log.d("MyLog", "Response error:$it")
         }
     )
 
     queue.add(stringRequest)
+}
+
+private fun getWeatherByDays(response: String): List<WeatherModel> {
+    if (response.isEmpty()) return emptyList()
+
+    val list = ArrayList<WeatherModel>()
+    val mainObject = JSONObject(response)
+    val city = mainObject.getJSONObject("location").getString("name")
+    val days = mainObject.getJSONObject("forecast").getJSONArray("forecastday")
+
+    for (i in 0 until days.length()) {
+        val item = days[i] as JSONObject
+        list.add(
+            WeatherModel(
+                city,
+                item.getString("date"),
+                "",
+                item.getJSONObject("day").getJSONObject("condition").getString("text"),
+                item.getJSONObject("day").getJSONObject("condition").getString("icon"),
+                item.getJSONObject("day").getString("maxtemp_c"),
+                item.getJSONObject("day").getString("mintemp_c"),
+                item.getJSONArray("hour").toString()
+            )
+        )
+    }
+    list[0] = list[0].copy(
+        time = mainObject.getJSONObject("current").getString("last_updated"),
+        currentTemp = mainObject.getJSONObject("current").getString("temp_c")
+    )
+    return list
 }
