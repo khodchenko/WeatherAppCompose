@@ -43,9 +43,8 @@ import com.khodchenko.weatherappcompose.data.WeatherModel
 import kotlinx.coroutines.launch
 
 
-@Preview(showBackground = true)
 @Composable
-fun MainCard() {
+fun MainCard(currentDay: MutableState<WeatherModel>) {
     Column(
         modifier = Modifier
             .padding(6.dp)
@@ -72,12 +71,12 @@ fun MainCard() {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = "20 Jun 2022 13:00",
+                        text = currentDay.value.time,
                         modifier = Modifier.padding(top = 10.dp, start = 10.dp),
                         style = TextStyle(fontSize = 15.sp)
                     )
                     AsyncImage(
-                        model = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
+                        model = "https:${currentDay.value.icon}",
                         contentDescription = "Weather icon",
                         modifier = Modifier
                             .size(35.dp)
@@ -87,17 +86,17 @@ fun MainCard() {
                 }
 
                 Text(
-                    text = "Madrid",
+                    text = currentDay.value.city,
                     style = TextStyle(fontSize = 24.sp)
                 )
 
                 Text(
-                    text = "23°C",
+                    text = currentDay.value.currentTemp.toFloat().toInt().toString() + "°C",
                     style = TextStyle(fontSize = 64.sp)
                 )
 
                 Text(
-                    text = "Partly cloudy",
+                    text = currentDay.value.condition,
                     style = TextStyle(fontSize = 16.sp)
                 )
 
@@ -115,7 +114,9 @@ fun MainCard() {
                     }
 
                     Text(
-                        text = "23°C/12°C",
+                        text = "${
+                            currentDay.value.minTemp.toFloat().toInt()
+                        }°C...${currentDay.value.maxTemp.toFloat().toInt()}°C",
                         style = TextStyle(fontSize = 16.sp)
                     )
 
@@ -137,7 +138,7 @@ fun MainCard() {
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout(daysList : MutableState<List<WeatherModel>>) {
+fun TabLayout(daysList: MutableState<List<WeatherModel>>) {
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
