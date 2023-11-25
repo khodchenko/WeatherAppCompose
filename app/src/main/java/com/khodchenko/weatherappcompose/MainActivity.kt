@@ -38,8 +38,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WeatherAppComposeTheme {
+                getData("London", this)
                 Image(
-                    painter = painterResource(id = R.drawable.weather_bg), contentDescription = "Background",
+                    painter = painterResource(id = R.drawable.weather_bg),
+                    contentDescription = "Background",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
                 )
@@ -90,8 +92,30 @@ private fun getResult(city: String, state: MutableState<String>, context: Contex
         url,
         { response ->
             val obj = JSONObject(response)
-            state.value = obj.getJSONObject("current").getString("temp_c") + " C"},
+            state.value = obj.getJSONObject("current").getString("temp_c") + " C"
+        },
         { error -> Log.d("MyLog", "Error:$error") }
+    )
+
+    queue.add(stringRequest)
+}
+
+private fun getData(city: String, context: Context) {
+    val url = "https://api.weatherapi.com/v1/forecast.json?key=$API_KEY" +
+            "&q=$city" +
+            "&days=" +
+            "3" +
+            "1&aqi=no&alerts=no"
+
+    val queue = Volley.newRequestQueue(context)
+    val stringRequest = StringRequest(
+        Request.Method.GET,
+        url,
+        { response ->
+            Log.d("MyLog", "Response :$response")
+        }, {
+            Log.d("MyLog", "Response error:$it")
+        }
     )
 
     queue.add(stringRequest)
